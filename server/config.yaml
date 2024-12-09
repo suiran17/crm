@@ -6,9 +6,11 @@ server:
 # MySQL数据库配置
 mysql:
   host: 127.0.0.1
-  port: 3306
+  port: 23306
+#  port: 3306
   username: root
-  password: 123456
+#  password: 123456
+  password: root123
   dbname: crm
   maxIdleConns: 10
   maxOpenConns: 100
@@ -18,7 +20,7 @@ mysql:
 # Redis数据库配置
 redis:
   host: 127.0.0.1
-  port: 6379
+  port: 26379
   password: 
   database: 0
 
@@ -29,7 +31,8 @@ jwt:
 
 # 文件存储配置
 file:
-  path: /home/ubuntu/crm/source/
+#  path: /home/ubuntu/crm/source/
+  path: ~/zptmp/tmp
 
 # 邮件服务配置
 mail:

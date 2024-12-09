@@ -2,15 +2,16 @@ package dao
 
 import (
 	"context"
-	"crm/common"
-	"crm/global"
-	"crm/models"
 	"io"
 	"log"
 	"mime/multipart"
 	"os"
 	"path"
 	"strings"
+
+	"crm/common"
+	"crm/global"
+	"crm/models"
 )
 
 const (
@@ -82,26 +83,40 @@ func (c *CommonDao) InitDatabase() error {
 	return nil
 }
 
+// FileUpload 实现文件上传功能。
+// 它接收一个multipart.FileHeader指针作为参数，返回一个models.FileInfo指针和一个错误。
+// 该方法主要负责生成文件的唯一标识，计算文件存储路径，打开并复制文件内容到目标路径，最后返回文件信息。
 func (c *CommonDao) FileUpload(file *multipart.FileHeader) (*models.FileInfo, error) {
+	// 从全局配置中获取文件存储路径
 	dist := global.Config.File.Path
+	// 生成唯一文件名，加上原文件名的扩展名
 	name := common.GenUUID() + path.Ext(file.Filename)
+	// 拼接得到文件的存储路径
 	dn := dist + name
+
+	// 打开上传的文件，准备进行复制
 	src, err := file.Open()
 	if err != nil {
 		return nil, err
 	}
+	// 确保文件关闭，避免资源泄露
 	defer src.Close()
 
+	// 创建目标文件，准备写入
 	out, err := os.Create(dn)
 	if err != nil {
 		return nil, err
 	}
+	// 确保文件关闭，避免资源泄露
 	defer out.Close()
 
+	// 将上传的文件内容复制到目标文件
 	_, err = io.Copy(out, src)
 	if err != nil {
 		return nil, err
 	}
+
+	// 构建文件信息对象，包含文件的URL和名称
 	flieInfo := models.FileInfo{
 		Url:  dn,
 		Name: name,

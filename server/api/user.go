@@ -1,11 +1,12 @@
 package api
 
 import (
+	"log"
+	"strconv"
+
 	"crm/models"
 	"crm/response"
 	"crm/service"
-	"log"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +22,7 @@ func NewUserApi() *UserApi {
 	return &userApi
 }
 
-// 用户注册
+// Register 用户注册
 func (u *UserApi) Register(context *gin.Context) {
 	var param models.UserCreateParam
 	if err := context.ShouldBind(&param); err != nil {
@@ -33,7 +34,7 @@ func (u *UserApi) Register(context *gin.Context) {
 	response.Result(errCode, nil, context)
 }
 
-// 用户登录
+// Login 用户登录
 func (u *UserApi) Login(context *gin.Context) {
 	var param models.UserLoginParam
 	if err := context.ShouldBind(&param); err != nil {
@@ -48,7 +49,7 @@ func (u *UserApi) Login(context *gin.Context) {
 	response.Result(errCode, userInfo, context)
 }
 
-// 获取验证码
+// GetVerifyCode 获取验证码
 func (u *UserApi) GetVerifyCode(context *gin.Context) {
 	var param models.UserVerifyCodeParam
 	if err := context.ShouldBind(&param); err != nil {
@@ -59,7 +60,7 @@ func (u *UserApi) GetVerifyCode(context *gin.Context) {
 	response.Result(errCode, nil, context)
 }
 
-// 忘记密码
+// ForgotPass 忘记密码
 func (u *UserApi) ForgotPass(context *gin.Context) {
 	var param models.UserPassParam
 	if err := context.ShouldBind(&param); err != nil {
@@ -70,7 +71,7 @@ func (u *UserApi) ForgotPass(context *gin.Context) {
 	response.Result(errCode, nil, context)
 }
 
-// 注销账号
+// Delete 注销账号
 func (u *UserApi) Delete(context *gin.Context) {
 	var param models.UserDeleteParam
 	uid, _ := strconv.Atoi(context.Request.Header.Get("uid"))
@@ -84,7 +85,7 @@ func (u *UserApi) Delete(context *gin.Context) {
 	response.Result(errCode, nil, context)
 }
 
-// 获取用户信息
+// GetInfo 获取用户信息
 func (u *UserApi) GetInfo(context *gin.Context) {
 	uid, _ := strconv.Atoi(context.Request.Header.Get("uid"))
 	if uid <= 0 {

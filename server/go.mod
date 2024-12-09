@@ -6,8 +6,8 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-pay/gopay v1.5.88
 	github.com/go-redis/redis/v9 v9.0.0-rc.1
+	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/golang-jwt/jwt/v4 v4.4.2
-	github.com/onsi/ginkgo v1.16.5
 	github.com/spf13/viper v1.13.0
 	github.com/xuri/excelize/v2 v2.6.1
 	gorm.io/driver/mysql v1.4.3
@@ -15,7 +15,6 @@ require (
 )
 
 require (
-	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.3 // indirect

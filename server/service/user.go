@@ -1,12 +1,13 @@
 package service
 
 import (
+	"fmt"
+	"log"
+
 	"crm/common"
 	"crm/dao"
 	"crm/models"
 	"crm/response"
-	"fmt"
-	"log"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -30,7 +31,7 @@ func NewUserService() *UserService {
 	return &userService
 }
 
-// 用户注册
+// Register 用户注册
 func (u *UserService) Register(param *models.UserCreateParam) int {
 
 	// 判断用户是否存在
@@ -45,10 +46,17 @@ func (u *UserService) Register(param *models.UserCreateParam) int {
 	}
 
 	// 对密码进行加密
-	password, err := bcrypt.GenerateFromPassword([]byte(param.Password), bcrypt.DefaultCost)
+	// 使用 bcrypt 库的 GenerateFromPassword 函数生成密码的哈希值
+	// param.Password 是用户输入的明文密码，转换为字节切片
+	// bcrypt.DefaultCost 是默认的哈希成本，通常为 10
+	password, err := bcrypt.GenerateFromPassword([]byte(param.Password), bcrypt.DefaultCost) // 哈希加密
 	if err != nil {
+		// 如果生成哈希值失败，返回一个表示操作失败的错误码
 		return response.ErrCodeFailed
 	}
+
+	// 将生成的哈希值转换为字符串，并赋值给 param.Password
+	// 这样，后续操作中使用的是哈希值而不是明文密码
 	param.Password = string(password)
 
 	// 创建用户
@@ -89,7 +97,7 @@ func (u *UserService) Register(param *models.UserCreateParam) int {
 	return response.ErrCodeSuccess
 }
 
-// 用户登录
+// Login 用户登录
 func (u *UserService) Login(param *models.UserLoginParam) (*models.UserInfo, int) {
 
 	// 判断用户是否存在
@@ -130,7 +138,7 @@ func (u *UserService) Login(param *models.UserLoginParam) (*models.UserInfo, int
 	return &userInfo, response.ErrCodeSuccess
 }
 
-// 获取验证码
+// GetVerifyCode 获取验证码
 func (u *UserService) GetVerifyCode(email string) int {
 	// 生成6位随机数
 	code := common.RandInt(100000, 999998)
@@ -149,7 +157,7 @@ func (u *UserService) GetVerifyCode(email string) int {
 	return response.ErrCodeSuccess
 }
 
-// 忘记密码
+// ForgotPass 忘记密码
 func (u *UserService) ForgotPass(param *models.UserPassParam) int {
 	// 判断用户是否存在
 	if !u.userDao.IsExists(param.Email) {
@@ -173,7 +181,7 @@ func (u *UserService) ForgotPass(param *models.UserPassParam) int {
 	return response.ErrCodeSuccess
 }
 
-// 注销账号
+// Delete 注销账号
 func (u *UserService) Delete(param models.UserDeleteParam) int {
 	// 校验验证码是否正确
 	code := u.userDao.GetCode(param.Email)
@@ -187,7 +195,7 @@ func (u *UserService) Delete(param models.UserDeleteParam) int {
 	return response.ErrCodeSuccess
 }
 
-// 获取用户信息
+// GetInfo 获取用户信息
 func (u *UserService) GetInfo(uid int64) (*models.UserPersonInfo, int) {
 	userInfo, err := u.userDao.GetInfo(uid)
 	if err != nil {
