@@ -1,16 +1,18 @@
 package api
 
 import (
+	"net/http"
+	"strconv"
+
 	"crm/common"
 	"crm/models"
 	"crm/response"
 	"crm/service"
-	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
+// SubscribeApi 订阅
 type SubscribeApi struct {
 	subscribeService *service.SubscribeService
 }
@@ -22,7 +24,7 @@ func NewSubscribeApi() *SubscribeApi {
 	return &subscribeApi
 }
 
-// 订阅专业版，发起支付
+// Pay 订阅专业版，发起支付
 func (s *SubscribeApi) Pay(context *gin.Context) {
 	var param models.SubscribePayParam
 	uid, _ := strconv.Atoi(context.Request.Header.Get("uid"))
@@ -36,7 +38,7 @@ func (s *SubscribeApi) Pay(context *gin.Context) {
 	response.Result(errCode, payUrl, context)
 }
 
-// 支付成功回调
+// PayBack 支付成功回调
 func (s *SubscribeApi) PayBack(context *gin.Context) {
 	notifyReq := common.GetAlipay().VerifySign(context.Request)
 	errCode := s.subscribeService.PayBack(notifyReq.GetString("out_trade_no"))
@@ -44,7 +46,7 @@ func (s *SubscribeApi) PayBack(context *gin.Context) {
 	response.Result(errCode, nil, context)
 }
 
-// 获取订阅信息
+// GetInfo 获取订阅信息
 func (s *SubscribeApi) GetInfo(context *gin.Context) {
 	uid, _ := strconv.Atoi(context.Request.Header.Get("uid"))
 	if int64(uid) <= 0 {

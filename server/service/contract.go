@@ -1,13 +1,13 @@
 package service
 
 import (
+	"strconv"
+	"time"
+
 	"crm/common"
 	"crm/dao"
 	"crm/models"
 	"crm/response"
-	"strconv"
-
-	"time"
 )
 
 type ContractService struct {
@@ -109,7 +109,7 @@ func (c *ContractService) GetProductList(param *models.ContractQueryParam) ([]*m
 	return addedProductList, response.ErrCodeSuccess
 }
 
-// 导出Excel文件
+// Export 导出Excel文件
 func (c *ContractService) Export(uid int64) (string, int) {
 	contracts, err := c.contractDao.GetListByUid(uid)
 	if err != nil {

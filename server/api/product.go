@@ -1,10 +1,11 @@
 package api
 
 import (
+	"strconv"
+
 	"crm/models"
 	"crm/response"
 	"crm/service"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,7 +21,7 @@ func NewProductApi() *ProductApi {
 	return &productApi
 }
 
-// 创建产品
+// Create 创建产品
 func (p *ProductApi) Create(context *gin.Context) {
 	var param models.ProductCreateParam
 	uid, _ := strconv.Atoi(context.Request.Header.Get("uid"))
@@ -34,7 +35,7 @@ func (p *ProductApi) Create(context *gin.Context) {
 	response.Result(errCode, nil, context)
 }
 
-// 更新产品
+// Update 更新产品
 func (p *ProductApi) Update(context *gin.Context) {
 	var param models.ProductUpdateParam
 	if err := context.ShouldBind(&param); err != nil {
@@ -45,7 +46,7 @@ func (p *ProductApi) Update(context *gin.Context) {
 	response.Result(errCode, nil, context)
 }
 
-// 删除产品
+// Delete 删除产品
 func (p *ProductApi) Delete(context *gin.Context) {
 	var param models.ProductDeleteParam
 	if err := context.ShouldBind(&param); err != nil {
@@ -56,7 +57,7 @@ func (p *ProductApi) Delete(context *gin.Context) {
 	response.Result(errCode, nil, context)
 }
 
-// 查询产品列表
+// GetList 查询产品列表
 func (p *ProductApi) GetList(context *gin.Context) {
 	var param models.ProductQueryParam
 	uid, _ := strconv.Atoi(context.Request.Header.Get("uid"))
@@ -70,7 +71,7 @@ func (p *ProductApi) GetList(context *gin.Context) {
 	response.PageResult(errCode, productList, rows, context)
 }
 
-// 查询产品信息
+// GetInfo 查询产品信息
 func (p *ProductApi) GetInfo(context *gin.Context) {
 	var param models.ProductQueryParam
 	if err := context.ShouldBind(&param); err != nil {
@@ -81,7 +82,7 @@ func (p *ProductApi) GetInfo(context *gin.Context) {
 	response.Result(errCode, productInfo, context)
 }
 
-// 导出Excel文件
+// Export 导出Excel文件
 func (p *ProductApi) Export(context *gin.Context) {
 	uid, _ := strconv.Atoi(context.Request.Header.Get("uid"))
 	if uid <= 0 {

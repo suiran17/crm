@@ -1,12 +1,13 @@
 package service
 
 import (
+	"strconv"
+	"time"
+
 	"crm/common"
 	"crm/dao"
 	"crm/models"
 	"crm/response"
-	"strconv"
-	"time"
 )
 
 type ProductService struct {
@@ -19,7 +20,7 @@ func NewProductService() *ProductService {
 	}
 }
 
-// 创建产品
+// Create 创建产品
 func (p *ProductService) Create(param *models.ProductCreateParam) int {
 	if p.productDao.IsExists(param.Name, param.Creator) {
 		return response.ErrCodeProductHasExist
@@ -30,7 +31,7 @@ func (p *ProductService) Create(param *models.ProductCreateParam) int {
 	return response.ErrCodeSuccess
 }
 
-// 更新产品
+// Update 更新产品
 func (p *ProductService) Update(param *models.ProductUpdateParam) int {
 	if err := p.productDao.Update(param); err != nil {
 		return response.ErrCodeFailed
@@ -38,7 +39,7 @@ func (p *ProductService) Update(param *models.ProductUpdateParam) int {
 	return response.ErrCodeSuccess
 }
 
-// 删除产品
+// Delete 删除产品
 func (p *ProductService) Delete(param *models.ProductDeleteParam) int {
 	if err := p.productDao.Delete(param); err != nil {
 		return response.ErrCodeFailed
@@ -46,7 +47,7 @@ func (p *ProductService) Delete(param *models.ProductDeleteParam) int {
 	return response.ErrCodeSuccess
 }
 
-// 查询产品列表
+// GetList 查询产品列表
 func (p *ProductService) GetList(param *models.ProductQueryParam) ([]*models.ProductList, int64, int) {
 	productList, rows, err := p.productDao.GetList(param)
 	if err != nil {
@@ -55,7 +56,7 @@ func (p *ProductService) GetList(param *models.ProductQueryParam) ([]*models.Pro
 	return productList, rows, response.ErrCodeSuccess
 }
 
-// 查询产品信息
+// GetInfo 查询产品信息
 func (p *ProductService) GetInfo(param *models.ProductQueryParam) (*models.ProductInfo, int) {
 	productInfo, err := p.productDao.GetInfo(param)
 	if err != nil {
@@ -64,7 +65,7 @@ func (p *ProductService) GetInfo(param *models.ProductQueryParam) (*models.Produ
 	return productInfo, response.ErrCodeSuccess
 }
 
-// 导出Excel文件
+// Export 导出Excel文件
 func (p *ProductService) Export(uid int64) (string, int) {
 	products, err := p.productDao.GetListByUid(uid)
 	if err != nil {
